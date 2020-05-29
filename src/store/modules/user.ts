@@ -113,7 +113,7 @@ class User extends VuexModule implements IUserState {
         username: 'admin',
         password: 'any',
         name: 'Super Admin',
-        avatar: 'https://user-images.githubusercontent.com/2106987/68087873-a0543980-fe94-11e9-8203-62958ce69ed6.png',
+        avatar: '/apisix/dashboard/favicon.ico',
         introduction: 'I am a super administrator',
         email: 'dev@apache.org',
         phone: '1234567890',

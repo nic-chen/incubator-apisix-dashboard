@@ -37,7 +37,7 @@
         to="/"
       >
         <img
-          src="favicon.ico"
+          src="/apisix/dashboard/favicon.ico"
           class="sidebar-logo"
         >
       </router-link>
@@ -48,7 +48,7 @@
         to="/"
       >
         <img
-          src="favicon.ico"
+          src="/apisix/dashboard/favicon.ico"
           class="sidebar-logo"
         >
         <h1 class="sidebar-title">
