@@ -1,6 +1,8 @@
 -- this is a db script for init
 CREATE DATABASE `manager`;
+
 use `manager`;
+
 CREATE TABLE `routes` (
   `id` varchar(64) NOT NULL unique,
   `name` varchar(200) NOT NULL unique, -- not support yet
