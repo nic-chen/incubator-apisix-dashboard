@@ -10,31 +10,18 @@ on:
       - master
       - refactor
 
-jobs:
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Install Go
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13.x
-
-    - name: Checkout code
-      uses: actions/checkout@v1
-
-    - name: Install golangci-lint
-      run: |
-        go get github.com/golangci/golangci-lint/cmd/golangci-lint
-
-    - name: Run linters
-      working-directory: ./api
-      run: |
-        export PATH=$PATH:$(go env GOPATH)/bin   
-        ./pre-commit
- 
+jobs: 
   coverage:
     runs-on: ubuntu-latest
+    services:
+      etcd:
+        image: bitnami/etcd:3.4.13
+        ports:
+          - 2379:2379
+          - 2380:2380
+        env:
+          ALLOW_NONE_AUTHENTICATION: yes
+
     steps:
     - name: Install Go
       if: success()
@@ -48,6 +35,7 @@ jobs:
     - name: Calc coverage 
       working-directory: ./api
       run: |
+        export APIX_ETCD_ENDPOINTS=127.0.0.1:2379
         export PATH=$PATH:$(go env GOPATH)/bin   
         go test ./... -v -covermode=count -coverprofile=coverage.out
 
