@@ -52,14 +52,12 @@ jobs:
         go test ./... -v -covermode=count -coverprofile=coverage.out
 
     - name: Convert coverage to lcov
-      working-directory: ./api
       uses: jandelgado/gcov2lcov-action@v1.0.0
       with:
           infile: coverage.out
           outfile: coverage.lcov
 
     - name: Coveralls
-      working-directory: ./api
       uses: coverallsapp/github-action@v1.0.1
       with:
           github-token: ${{ secrets.COVERALLS_TOKEN }}
