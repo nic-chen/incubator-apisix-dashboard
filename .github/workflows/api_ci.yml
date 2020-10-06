@@ -12,10 +12,62 @@ on:
 
 jobs:
 
-  run-test:
-
+  lint:
     runs-on: ubuntu-latest
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13.x
 
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Install golangci-lint
+      run: |
+        go get github.com/golangci/golangci-lint/cmd/golangci-lint
+
+    - name: Run linters
+      working-directory: ./api
+      run: |
+        export PATH=$PATH:$(go env GOPATH)/bin   
+        ./pre-commit
+ 
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Go
+      if: success()
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13.x
+
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Calc coverage 
+      working-directory: ./api
+      run: |
+        export PATH=$PATH:$(go env GOPATH)/bin   
+        go test ./... -v -covermode=count -coverprofile=coverage.out
+
+    - name: Convert coverage to lcov
+      working-directory: ./api
+      uses: jandelgado/gcov2lcov-action@v1.0.0
+      with:
+          infile: coverage.out
+          outfile: coverage.lcov
+
+    - name: Coveralls
+      working-directory: ./api
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+          github-token: ${{ secrets.COVERALLS_TOKEN }}
+          path-to-lcov: coverage.lcov
+
+
+  test:
+    runs-on: ubuntu-latest
     services:
       etcd:
         image: bitnami/etcd:3.4.13
@@ -26,9 +78,7 @@ jobs:
           ALLOW_NONE_AUTHENTICATION: yes
 
     steps:
-
     - uses: actions/checkout@v2
-
     - name: run Makefile
       run: |
         make license-check
