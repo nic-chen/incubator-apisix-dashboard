@@ -23,33 +23,34 @@ jobs:
           ALLOW_NONE_AUTHENTICATION: yes
 
     steps:
-    - name: Install Go
-      if: success()
+    - name: Set up Go
       uses: actions/setup-go@v1
       with:
-        go-version: 1.13.x
+        go-version: '1.14'
 
-    - name: Checkout code
-      uses: actions/checkout@v1
+    - name: Check out code
+      uses: actions/checkout@v2
 
-    - name: Calc coverage 
+    - name: Install dependencies
       working-directory: ./api
       run: |
-        export APIX_ETCD_ENDPOINTS=127.0.0.1:2379
-        export PATH=$PATH:$(go env GOPATH)/bin   
-        go test ./... -v -covermode=count -coverprofile=coverage.out
+        go mod download
 
-    - name: Convert coverage to lcov
-      uses: jandelgado/gcov2lcov-action@v1.0.2
-      with:
-          infile: api/coverage.out
-          outfile: api/coverage.lcov
+    - name: Run Unit tests
+      working-directory: ./api
+      run: |
+        go test -race -covermode atomic -coverprofile=covprofile ./...
 
-    - name: Coveralls
-      uses: coverallsapp/github-action@v1.0.1
-      with:
-          github-token: ${{ secrets.COVERALLS_TOKEN }}
-          path-to-lcov: api/coverage.lcov
+    - name: Install goveralls
+      env:
+        GO111MODULE: off
+      run: go get github.com/mattn/goveralls
+
+    - name: Send coverage
+      working-directory: ./api
+      env:
+        COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      run: goveralls -coverprofile=covprofile -service=github
 
 
   test:
