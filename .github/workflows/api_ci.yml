@@ -39,6 +39,7 @@ jobs:
     - name: Run Unit tests
       working-directory: ./api
       run: |
+        export APIX_ETCD_ENDPOINTS=127.0.0.1:2379
         go test -race -covermode atomic -coverprofile=covprofile ./...
 
     - name: Install goveralls
