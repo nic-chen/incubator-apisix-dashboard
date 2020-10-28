@@ -21,9 +21,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"runtime"
 
-	"github.com/tidwall/gjson"
+  "github.com/tidwall/gjson"
 
 	"github.com/apisix/manager-api/internal/utils"
 )
@@ -65,7 +64,14 @@ func setEnvironment() {
 		DagLibPath = env
 	}
 
-	_, basePath, _, _ = runtime.Caller(1)
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	basePath = filepath.Dir(ex)
+
+	//_, basePath, _, _ = runtime.Caller(1)
+	//basePath, _ = os.Getwd()
 }
 
 func configurationPath() string {
