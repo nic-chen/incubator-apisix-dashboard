@@ -51,11 +51,11 @@ func InitStore(key HubKey, opt GenericStoreOption) error {
 	}
 	s, err := NewGenericStore(opt)
 	if err != nil {
-		log.Warnf("NewGenericStore error: %w", err)
+		log.Warnf("NewGenericStore %s error: %w", key, err)
 		return err
 	}
 	if err := s.Init(); err != nil {
-		log.Warnf("GenericStore init error: %w", err)
+		log.Warnf("GenericStore %s init error: %w", key, err)
 		return err
 	}
 

@@ -36,11 +36,11 @@ import (
 func main() {
 
 	if err := storage.InitETCDClient(conf.ETCDEndpoints); err != nil {
-		log.Error("init etcd client fail: %w", err)
+		log.Errorf("init etcd client fail: %w", err)
 		panic(err)
 	}
 	if err := store.InitStores(); err != nil {
-		log.Error("init stores fail: %w", err)
+		log.Errorf("init stores fail: %w", err)
 		panic(err)
 	}
 	// routes
