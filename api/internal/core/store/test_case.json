@@ -2,6 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
+    "$comment": "this is a mark for our injected plugin schema",
     "name": {
       "type": "string",
       "minLength": 10
