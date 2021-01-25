@@ -52,12 +52,12 @@ const (
 
 func parseCert(crt, key string) ([]string, error) {
 	if crt == "" || key == "" {
-		return nil, errors.New("invalid certificate")
+		return nil, errors.New("empty certificate or private key")
 	}
 
 	certDERBlock, _ := pem.Decode([]byte(crt))
 	if certDERBlock == nil {
-		return nil, errors.New("Certificate resolution failed")
+		return nil, errors.New("certificate resolution failed")
 	}
 	// match
 	_, err := tls.X509KeyPair([]byte(crt), []byte(key))
@@ -68,7 +68,7 @@ func parseCert(crt, key string) ([]string, error) {
 	x509Cert, err := x509.ParseCertificate(certDERBlock.Bytes)
 
 	if err != nil {
-		return nil, errors.New("Certificate resolution failed")
+		return nil, errors.New("certificate resolution failed")
 	}
 
 	//domain
@@ -81,7 +81,7 @@ func parseCert(crt, key string) ([]string, error) {
 		}
 	} else {
 		if x509Cert.Subject.Names != nil && len(x509Cert.Subject.Names) > 0 {
-			var attributeTypeNames = map[string]string{
+			attributeTypeNames := map[string]string{
 				"2.5.4.6":  "C",
 				"2.5.4.10": "O",
 				"2.5.4.11": "OU",
