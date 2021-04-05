@@ -37,9 +37,9 @@ jobs:
         echo "##[set-output name=version;]$(echo ${GITHUB_REF##*/})"
 
     - name: Build rpm package
-      if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
+      #if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
       run: |
-        export VERSION=${{ steps.branch_env.outputs.version }}
+        export VERSION=2.5
         sudo gem install --no-document fpm
         git clone https://github.com/api7/apisix-build-tools.git
         cd apisix-build-tools
@@ -53,7 +53,7 @@ jobs:
         docker run -itd -v $PWD:/apisix-dashboard --name centos7Instance --net="host" docker.io/centos:7 /bin/bash
 
     - name: Install rpm package
-      if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
+      #if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
       run: |
         docker exec centos7Instance bash -c "cd apisix-dashboard && rpm -iv --prefix=/apisix-dashboard ./apisix-build-tools/output/apisix-dashboard-${{ steps.branch_env.outputs.version }}-0.x86_64.rpm"
         docker logs centos7Instance
