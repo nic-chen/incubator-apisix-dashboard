@@ -55,15 +55,15 @@ jobs:
     - name: Install rpm package
       #if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
       run: |
-        docker exec centos7Instance bash -c "cd apisix-dashboard && rpm -iv --prefix=/apisix-dashboard ./apisix-build-tools/output/apisix-dashboard-${{ steps.branch_env.outputs.version }}-0.x86_64.rpm"
+        export VERSION=2.5
+        docker exec centos7Instance bash -c "cd apisix-dashboard && rpm -iv --prefix=/apisix-dashboard ./apisix-build-tools/output/apisix-dashboard-${VERSION}-0.x86_64.rpm"
         docker logs centos7Instance
         # Dependencies are attached with rpm, so revert `make deps`
-        docker exec centos7Instance bash -c "cd apisix-dashboard && rm -rf deps"
         docker exec centos7Instance bash -c "cd apisix-dashboard && mv usr/bin . && mv usr/local/apisix-dashboard/* ."
 
     - name: Run test cases
       run: |
-        docker exec centos7Instance bash -c "cd apisix && ./utils/centos7-ci.sh run_case"
+        api/test/shell/manager_smoking.sh -s true
 
     - name: Publish Artifact
       if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
