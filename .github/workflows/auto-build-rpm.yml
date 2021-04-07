@@ -56,10 +56,10 @@ jobs:
       #if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
       run: |
         export VERSION=2.5
-        docker exec centos7Instance bash -c "cd apisix-dashboard && sudo yum install ./apisix-build-tools/output/apisix-dashboard-${VERSION}-0.x86_64.rpm"
+        docker exec centos7Instance bash -c "cd apisix-dashboard && yum install ./apisix-build-tools/output/apisix-dashboard-${VERSION}-0.x86_64.rpm"
         docker logs centos7Instance
         # Dependencies are attached with rpm, so revert `make deps`
-        docker exec centos7Instance bash -c "cd /usr/local/apisix/dashboard/ && sudo nohup ./manager-api &"
+        docker exec centos7Instance bash -c "cd /usr/local/apisix/dashboard/ && nohup ./manager-api &"
 
     - name: Run test cases
       run: |
