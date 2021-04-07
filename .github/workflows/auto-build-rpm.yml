@@ -61,9 +61,9 @@ jobs:
         # Dependencies are attached with rpm, so revert `make deps`
         docker exec centos7Instance bash -c "cd apisix-dashboard && mv usr/bin . && mv usr/local/apisix-dashboard/* ."
 
-    - name: Run test cases
-      run: |
-        api/test/shell/manager_smoking.sh -s true
+    # - name: Run test cases
+    #   run: |
+    #     api/test/shell/manager_smoking.sh -s true
 
     - name: Publish Artifact
       #if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
