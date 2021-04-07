@@ -62,7 +62,6 @@ jobs:
         docker exec centos7Instance bash -c "cd apisix-dashboard && mv usr/bin . && mv usr/local/apisix-dashboard/* ."
 
     - name: Run test cases
-      if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
       run: |
         api/test/shell/manager_smoking.sh -s true
 
@@ -71,4 +70,4 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: "rpm"
-        path: "./apisix-build-tools/output/apisix-dashboard-${{ steps.branch_env.outputs.version }}-0.x86_64.rpm"
+        path: "./apisix-build-tools/output/apisix-dashboard-2.5-0.x86_64.rpm"
